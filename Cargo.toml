@@ -1,0 +1,43 @@
+[package]
+name = "spacelens"
+version = "1.0.0"
+edition = "2021"
+description = "Fast, modern disk space analyzer for Windows"
+
+[dependencies]
+# wgpu renderer: Direct3D 12 / Vulkan, so it runs on far more PCs than OpenGL.
+eframe = { version = "0.31", default-features = false, features = ["accesskit", "default_fonts", "wgpu"] }
+winit = { version = "0.30", default-features = false, features = ["rwh_06"] }
+rfd = "0.15"
+trash = "5"
+png = "0.17"
+
+[dependencies.windows-sys]
+version = "0.59"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_IO",
+    "Win32_System_Ioctl",
+    "Win32_System_Threading",
+    "Win32_System_Time",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_Graphics_Dwm",
+]
+
+[build-dependencies]
+winresource = "0.1"
+png = "0.17"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+
+# Keep scans fast even in debug builds.
+[profile.dev.package."*"]
+opt-level = 2
